@@ -1,12 +1,12 @@
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebElement;
-import java.util.List;
 
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,33 +14,44 @@ import static org.junit.jupiter.api.Assertions.*;
 public class Qa2HomeworkOne {
 
     private final By ACCEPT_COOKIES_BTN = By.xpath(".//button[@mode = 'primary']");
+    private final By HEADLINE_CLASS = By.className("list-article__headline");
+    private final By COMMENT_CLASS = By.className("list-article__comment");
+    private final By COMMENT_BTN = By.xpath(".//img[@src = '/v5/img/icons/comment-v2.svg']");
+    private final By LOGO = By.xpath(".//img[@src = 'https://f.pmo.ee/logos/4133/7b1236dab95abca45083322781760e97.svg']");
+    private final By TOP_MENU_CLASS = By.className("menu-items--top");
 
-    /* Тест 1: Задание: найти первую статью и перейти в камментарии. Я использовал список, хотя можно
-    было использовать FindElement и он выбрал бы первый из найденых. Но если бы нам нужна была вторая статья,
-    то пришлось бы использовать список. Поэтому я сразу его использовал.
+    private WebDriver driver = null;
 
-    Когда я запускал тест, я наткнулся на статью где коменнтарии были отключены. Тест начал ругаться, я
-    использовал: assertTrue(commentButtons.size()==1, "Comments disabled"); но потом когда кнопка появилась,
-    тест на неё не нажимал. List <WebElement> commentButtons - использован, потому что есть и другие кнопки.
-    Вопрос: когда и как правильно использовать assertTrue?
-    */
+    @BeforeAll
+    public static void configureChromeDriver() {
+        System.setProperty("webdriver.chrome.driver", "d://dev/chromedriver.exe");
+    }
+
+    @BeforeEach
+    public void startWebDriver() {
+        driver = new ChromeDriver();
+        driver.get("http://tvnet.lv");
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
+        driver.findElement(ACCEPT_COOKIES_BTN).click();
+    }
+
+    @AfterEach
+    public void shutDownWebDriver() {
+        driver.quit();
+    }
+
+    // Тест 1: Задание: найти первую статью и перейти в камментарии.
     @Test
     public void homeworkOneTaskOne() {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
 
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List <WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
         wait.until(ExpectedConditions.elementToBeClickable(headlines.get(0)));
         headlines.get(0).click();
 
-        List <WebElement> commentButtons = browserWindow.findElements(By.xpath(".//img[@src = '/v5/img/icons/comment-v2.svg']"));
-//        assertTrue(commentButtons.size()==1, "Comments disabled");
+        List<WebElement> commentButtons = driver.findElements(COMMENT_BTN);
+        assertTrue(commentButtons.size() > 0, "Comments disabled");
         WebElement commentButton = commentButtons.get(0);
         wait.until(ExpectedConditions.elementToBeClickable(commentButton));
         commentButton.click();
@@ -49,154 +60,66 @@ public class Qa2HomeworkOne {
     // Тест 2: Задание: Вывести заголовок первой статьи.
     @Test
     public void homeworkOneTaskTwo() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List <WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
         System.out.println("1. " + headlines.get(0).getText());
     }
+
     // Тест 3: Задание: Найти локаторы статей, коментариев, логотипа, кнопки перехода на русский TvNet.
     @Test
     public void homeworkOneTaskThree() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List <WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
         System.out.println("Articles: " + headlines.size());
 
-        List <WebElement> comments = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__comment section-font-color']"));
-        System.out.println("Comments: " +  comments.size());
+        List<WebElement> comments = driver.findElements(COMMENT_CLASS);
+        System.out.println("Comments: " + comments.size());
 
-        List <WebElement> logo = browserWindow.findElements(By.xpath(".//img[@src = 'https://f.pmo.ee/logos/4133/7b1236dab95abca45083322781760e97.svg']"));
-        System.out.println("Logo: " +  logo.size());
+        List<WebElement> logo = driver.findElements(LOGO);
+        System.out.println("Logo: " + logo.size());
 
-        WebElement menuTop = browserWindow.findElement(By.xpath(".//div[@class = 'menu-items menu-items--top']"));
-        List <WebElement> listItemsMenuTop = menuTop.findElements(By.className("menu-item"));
-        for (WebElement itemMenuTop: listItemsMenuTop) {
-            if (itemMenuTop.getText().toLowerCase().contains("rus")) {
-                itemMenuTop.click();
-                System.out.println("Language change.");
-            }
-        }
+        WebElement menuTop = driver.findElement(TOP_MENU_CLASS);
+        WebElement languageChangeBtn = menuTop.findElement(By.partialLinkText("RUS"));
+        languageChangeBtn.click();
     }
 
-    /* Тест 4: Задание: Вывести заголовоки всех статей без количества комментариев.
-    2 и 3 версии похожи. Есть вопрос: правильней создавать переменную String head = headlines.get(i).getText();
-    как во второй версии или лучше без неё. Оби версии работают не правильно, так как в статье могут быть "("
-    и тогда название статьи обрежится. Причём не важно с начала названия или с конца проверять.
-    Я попробывал найти под элемент в первом варианте, но не смог разобраться с:
-    if (!headlines.get(i).findElements(By.className("list-article__comment section-font-color")).isEmpty())
-    Вопрос: как проверить наличие элемента?
-     */
-/*    @Test
+    // Тест 4: Задание: Вывести заголовоки всех статей без количества комментариев.
+    private boolean headlineHasComments(WebElement element) {
+        String elementText = element.getText();
+        boolean headlineHasCounterFormatting = !element.findElements(COMMENT_CLASS).isEmpty();
+        boolean headlineEndsWithBracket = elementText.charAt(elementText.length() - 1) == ')';
+        return headlineHasCounterFormatting && headlineEndsWithBracket;
+    }
+
+    @Test
     public void homeworkOneTaskFourVerOne() {
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
+        assertTrue(headlines.size() > 0, "No headlines found");
 
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List<WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
         for (int i = 0; i < headlines.size(); i++) {
-            if (!headlines.get(i).findElements(By.className("list-article__comment section-font-color")).isEmpty()) {
-                System.out.println(i + 1 + " Comment avaible");
+            WebElement headline = headlines.get(i);
+            String headlineText = headline.getText();
+
+            if (headlineHasComments(headline)) {
+                int lastIndexOfCounter = headlineText.lastIndexOf('(');
+                String cleanHeadlineText = headlineText.substring(0, lastIndexOfCounter);
+                System.out.println(i + 1 + " " + cleanHeadlineText);
+                continue;
             }
+
+            System.out.println(i + 1 + " " + headlineText);
         }
     }
 
-*/
-    @Test
-    public void homeworkOneTaskFourVerTwo() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List <WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
-        for(int i=0; i < headlines.size(); i++)
-        {
-            String head = headlines.get(i).getText();
-            int removeComment = head.indexOf("(");
-            if (removeComment == -1) {
-                System.out.println(i+1 + ". " + head);
-            }
-            else{
-                System.out.println(i+1 + ". " + head.substring(0, removeComment));
-            }
-        }
-    }
-
-    @Test
-    public void homeworkOneTaskFourVerThree() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List <WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
-        for(int i=0; i < headlines.size(); i++)
-        {
-            int removeComment = headlines.get(i).getText().indexOf("(");
-            if (removeComment == -1) {
-                System.out.println(i+1 + ". " + headlines.get(i).getText());
-            }
-            else{
-                System.out.println(i+1 + ". " + headlines.get(i).getText().substring(0, removeComment));
-            }
-        }
-    }
-
-    /* Тест 5: Задание: Вывести загаловки всех статей с количеством элементов.
-    По скольку я не смог запустить проверку:
-    if (!headlines.get(i).findElements(By.className("list-article__comment section-font-color")).isEmpty()) {
-    а поиск по символу "(" обрезает заголовки статей, я оставил такой вариант.
-     */
+    // Тест 5: Задание: Вывести загаловки всех статей с количеством элементов.
     @Test
     public void homeworkOneTaskFive() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List <WebElement> headlines = browserWindow.findElements(By.xpath(".//span[@class = 'list-article__headline']"));
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
         System.out.println(headlines.size());
 
-        for(int i=0; i < headlines.size(); i++)
-        {
-            System.out.println(i+1 + ". " + headlines.get(i).getText());
+        for (int i = 0; i < headlines.size(); i++) {
+            WebElement headline = headlines.get(i);
+            if (!headlineHasComments(headline)) { continue; }
+            System.out.println(i + 1 + ". " + headline.getText());
         }
     }
 
 }
-/*
-Итог: два вопроса.
-1. когда и как правильно использовать assertTrue?
-2. как проверить наличие элемента?
- */
