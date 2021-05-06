@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,33 +7,50 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebElement;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+
 public class Qa2HomeworkOne {
 
     private final By ACCEPT_COOKIES_BTN = By.xpath(".//button[@mode = 'primary']");
-    private final By HEADLINES_LOCATOR_CLASS = By.xpath(".//span[@class = 'list-article__headline']");
-    private final By COMMENTS_LOCATOR_IMAGE_BTN = By.xpath(".//img[@src = '/v5/img/icons/comment-v2.svg']");
-    private final By COMMENTS_LOCATOR_CLASS = By.xpath(".//span[@class = 'list-article__comment section-font-color']");
-    private final By LOGO_LOCATOR_IMAGE = By.xpath(".//img[@src = 'https://f.pmo.ee/logos/4133/7b1236dab95abca45083322781760e97.svg']");
-    private final By MENUTOP_LOCATOR_CLASS = By.xpath(".//div[@class = 'menu-items menu-items--top']");
-    private final By ITEMMENUTOP_LOCATOR_CLASS = By.xpath(".//a[@class = 'menu-item']");
+    private final By HEADLINE_CLASS = By.className("list-article__headline");
+    private final By COMMENT_CLASS = By.className("list-article__comment");
+    private final By COMMENT_BTN = By.xpath(".//img[@src = '/v5/img/icons/comment-v2.svg']");
+    private final By LOGO = By.xpath(".//img[@src = 'https://f.pmo.ee/logos/4133/7b1236dab95abca45083322781760e97.svg']");
+    private final By TOP_MENU_CLASS = By.className("menu-items--top");
 
-    // Тест 1: Задание: найти первую статью и перейти в комментарии.
+    private WebDriver driver = null;
+
+    @BeforeAll
+    public static void configureChromeDriver() {
+        System.setProperty("webdriver.chrome.driver", "d://dev/chromedriver.exe");
+    }
+
+    @BeforeEach
+    public void startWebDriver() {
+        driver = new ChromeDriver();
+        driver.get("http://tvnet.lv");
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
+        driver.findElement(ACCEPT_COOKIES_BTN).click();
+    }
+
+    @AfterEach
+    public void shutDownWebDriver() {
+        driver.quit();
+    }
+
+    // Тест 1: Задание: найти первую статью и перейти в камментарии.
     @Test
     public void homeworkOneTaskOne() {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
 
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List<WebElement> headlines = browserWindow.findElements(HEADLINES_LOCATOR_CLASS);
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
         wait.until(ExpectedConditions.elementToBeClickable(headlines.get(0)));
         headlines.get(0).click();
 
-        List<WebElement> commentButtons = browserWindow.findElements(COMMENTS_LOCATOR_IMAGE_BTN);
+        List<WebElement> commentButtons = driver.findElements(COMMENT_BTN);
+        assertTrue(commentButtons.size() > 0, "Comments disabled");
         WebElement commentButton = commentButtons.get(0);
         wait.until(ExpectedConditions.elementToBeClickable(commentButton));
         commentButton.click();
@@ -42,97 +59,69 @@ public class Qa2HomeworkOne {
     // Тест 2: Задание: Вывести заголовок первой статьи.
     @Test
     public void homeworkOneTaskTwo() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        WebElement firstHeadline = browserWindow.findElement(HEADLINES_LOCATOR_CLASS);
-        System.out.println("1. " + firstHeadline.getText());
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
+        System.out.println("1. " + headlines.get(0).getText());
     }
 
     // Тест 3: Задание: Найти локаторы статей, коментариев, логотипа, кнопки перехода на русский TvNet.
     @Test
     public void homeworkOneTaskThree() {
-
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List<WebElement> headlines = browserWindow.findElements(HEADLINES_LOCATOR_CLASS);
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
         System.out.println("Articles: " + headlines.size());
 
-        List<WebElement> comments = browserWindow.findElements(COMMENTS_LOCATOR_CLASS);
+        List<WebElement> comments = driver.findElements(COMMENT_CLASS);
         System.out.println("Comments: " + comments.size());
 
-        List<WebElement> logo = browserWindow.findElements(LOGO_LOCATOR_IMAGE);
+        List<WebElement> logo = driver.findElements(LOGO);
         System.out.println("Logo: " + logo.size());
 
-        WebElement menuTop = browserWindow.findElement(MENUTOP_LOCATOR_CLASS);
-        List<WebElement> listItemsMenuTop = menuTop.findElements(ITEMMENUTOP_LOCATOR_CLASS);
-        for (WebElement itemMenuTop : listItemsMenuTop) {
-            if (itemMenuTop.getText().toLowerCase().contains("rus")) {
-                itemMenuTop.click();
-                System.out.println("Language change.");
-                break;
-            }
-        }
+        WebElement menuTop = driver.findElement(TOP_MENU_CLASS);
+        WebElement languageChangeBtn = menuTop.findElement(By.partialLinkText("RUS"));
+        languageChangeBtn.click();
     }
 
     // Тест 4: Задание: Вывести заголовоки всех статей без количества комментариев.
+    private boolean headlineHasComments(WebElement element) {
+        String elementText = element.getText();
+        boolean headlineHasCounterFormatting = !element.findElements(COMMENT_CLASS).isEmpty();
+        boolean headlineEndsWithBracket = elementText.charAt(elementText.length() - 1) == ')';
+        return headlineHasCounterFormatting && headlineEndsWithBracket;
+    }
+
     @Test
     public void homeworkOneTaskFourVerOne() {
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
+        assertTrue(headlines.size() > 0, "No headlines found");
 
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List<WebElement> headlines = browserWindow.findElements(HEADLINES_LOCATOR_CLASS);
         for (int i = 0; i < headlines.size(); i++) {
-            WebElement currentHeadline = headlines.get(i);
-            String headlineText = currentHeadline.getText();
-            if (!currentHeadline.findElements(COMMENTS_LOCATOR_CLASS).isEmpty()) {
-                WebElement currentСomment = currentHeadline.findElement(COMMENTS_LOCATOR_CLASS);
-                String comentText = (" " + currentСomment.getText());
-                String headlineNoComments = headlineText.replace(comentText, "");
-                System.out.println(i + 1 + ". " + headlineNoComments);
-            } else {
-                System.out.println(i + 1 + ". " + headlineText);
+            WebElement headline = headlines.get(i);
+            String headlineText = headline.getText();
+
+            if (headlineHasComments(headline)) {
+                int lastIndexOfCounter = headlineText.lastIndexOf('(');
+                String cleanHeadlineText = headlineText.substring(0, lastIndexOfCounter);
+                System.out.println(i + 1 + " " + cleanHeadlineText);
+                continue;
             }
+
+            System.out.println(i + 1 + " " + headlineText);
         }
     }
 
-    // Тест 5: Задание: Вывести загаловки всех статей с количеством комментариев.
+    // Тест 5: Задание: Вывести загаловки всех статей с количеством элементов.
     @Test
     public void homeworkOneTaskFive() {
+        List<WebElement> headlines = driver.findElements(HEADLINE_CLASS);
+        System.out.println(headlines.size());
 
-        System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
-        WebDriver browserWindow = new ChromeDriver();
-        browserWindow.manage().window().maximize();
-        browserWindow.get("http://tvnet.lv");
-        WebDriverWait wait = new WebDriverWait(browserWindow, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ACCEPT_COOKIES_BTN));
-        browserWindow.findElement(ACCEPT_COOKIES_BTN).click();
-
-        List<WebElement> headlines = browserWindow.findElements(HEADLINES_LOCATOR_CLASS);
         for (int i = 0; i < headlines.size(); i++) {
-            WebElement currentHeadline = headlines.get(i);
-            String headlineText = currentHeadline.getText();
-            boolean condition = !currentHeadline.findElements(COMMENTS_LOCATOR_CLASS).isEmpty();
-            String result = (condition) ? (i + 1 + ". " + headlineText) : (i + 1+ ". " + headlineText + " (0)");
-            System.out.println(result);
+            WebElement headline = headlines.get(i);
+            String headlineText = i + 1 + ". " + headline.getText();
+            if (!headlineHasComments(headline)) {
+                headlineText += " (0)";
+            }
+            System.out.println(headlineText);
         }
     }
+
 }
