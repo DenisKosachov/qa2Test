@@ -111,7 +111,6 @@ public class Qa2HomeworkOne {
             } else {
                 System.out.println(i + 1 + ". " + headlineText);
             }
-
         }
     }
 
@@ -131,11 +130,9 @@ public class Qa2HomeworkOne {
         for (int i = 0; i < headlines.size(); i++) {
             WebElement currentHeadline = headlines.get(i);
             String headlineText = currentHeadline.getText();
-            if (!currentHeadline.findElements(COMMENTS_LOCATOR_CLASS).isEmpty()) {
-                System.out.println(i + 1 + ". " + headlineText);
-            } else {
-                System.out.println(i + 1 + ". " + headlineText + " (0)");
-            }
+            boolean condition = !currentHeadline.findElements(COMMENTS_LOCATOR_CLASS).isEmpty();
+            String result = (condition) ? (i + 1 + ". " + headlineText) : (i + 1+ ". " + headlineText + " (0)");
+            System.out.println(result);
         }
     }
 }
