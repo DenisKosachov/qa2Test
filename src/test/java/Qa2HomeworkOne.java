@@ -116,8 +116,11 @@ public class Qa2HomeworkOne {
 
         for (int i = 0; i < headlines.size(); i++) {
             WebElement headline = headlines.get(i);
-            if (!headlineHasComments(headline)) { continue; }
-            System.out.println(i + 1 + ". " + headline.getText());
+            String headlineText = i + 1 + ". " + headline.getText();
+            if (!headlineHasComments(headline)) {
+                headlineText += " (0)";
+            }
+            System.out.println(headlineText);
         }
     }
 
