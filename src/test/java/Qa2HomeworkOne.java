@@ -89,7 +89,7 @@ public class Qa2HomeworkOne {
 
     // Тест 4: Задание: Вывести заголовоки всех статей без количества комментариев.
     @Test
-    public void homeworkOneTaskFourVerOne() {
+    public void homeworkOneTaskFour() {
 
         System.setProperty("webdriver.chrome.driver", "c://chromedriver.exe");
         WebDriver browserWindow = new ChromeDriver();
