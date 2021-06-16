@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import pageobject.pages.BaseFunc;
 
-public class ArticlePage {
+public class ArticlePageDelfi {
 
     private final By TITLE = By.xpath(".//h1[contains(@class, 'text-size-md-30')]");
     private final By COMMENTS = By.xpath(".//a[contains(@class, 'text-size-md-28')]");
@@ -13,7 +13,7 @@ public class ArticlePage {
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
     private BaseFunc baseFunc;
 
-    public ArticlePage(BaseFunc baseFunc) { this.baseFunc = baseFunc; }
+    public ArticlePageDelfi(BaseFunc baseFunc) { this.baseFunc = baseFunc; }
 
     public String getTitle() {
         LOGGER.info("Getting article title");
@@ -31,8 +31,9 @@ public class ArticlePage {
         }
     }
 
-    public void openCommentsPage() {
+    public CommentsPageDelfi openCommentsPage() {
         LOGGER.info("Opening article comments page");
         baseFunc.click(COMMENTS);
+        return new CommentsPageDelfi(baseFunc);
     }
 }

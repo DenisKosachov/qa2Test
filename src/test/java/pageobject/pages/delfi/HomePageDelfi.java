@@ -9,23 +9,26 @@ import pageobject.pages.BaseFunc;
 
 import java.util.List;
 
-public class HomePage {
+public class HomePageDelfi {
 
     private final By ACCEPT_COOKIE_BTN = By.xpath(".//button[@mode = 'primary']");
     private final By TITLE = By.xpath(".//h1[contains(@class, 'headline__title')]");
     private final By ARTICLE = By.tagName("article");
     private final By COMMENTS = By.xpath(".//a[contains(@class, 'comment-count')]");
+    private final By BLOCK_BTN = By.xpath(".//button[@class = 'close']");
 
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
     private BaseFunc baseFunc;
 
-    public HomePage(BaseFunc baseFunc) {
+    public HomePageDelfi(BaseFunc baseFunc) {
         this.baseFunc = baseFunc;
     }
 
     public void acceptCookies () {
         LOGGER.info("Accepting cookies");
         baseFunc.click(ACCEPT_COOKIE_BTN);
+        List<WebElement> closeButton = baseFunc.findElements(BLOCK_BTN);
+        baseFunc.click(closeButton.get(1));
     }
 
     public WebElement getArticleById(int id) {
@@ -52,9 +55,9 @@ public class HomePage {
         }
     }
 
-    public ArticlePage openArticle(int id) {
+    public ArticlePageDelfi openArticle(int id) {
         LOGGER.info("Opening article Nr. " + (id + 1));
         baseFunc.click(getArticleById(id));
-        return new ArticlePage(baseFunc);
+        return new ArticlePageDelfi(baseFunc);
     }
 }

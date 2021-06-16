@@ -2,13 +2,15 @@ package pageobject.pages.tvnet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobject.pages.BaseFunc;
+import pageobject.pages.delfi.ArticlePageDelfi;
 
 import java.util.List;
 
-public class HomePage {
+public class HomePageTvnet {
 
     private final By ACCEPT_COOKIE_BTN = By.xpath(".//button[@mode = 'primary']");
     private final By ARTICLES = By.xpath(".//span[@class = 'list-article__headline']");
@@ -20,7 +22,7 @@ public class HomePage {
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
     private BaseFunc baseFunc;
 
-    public HomePage(BaseFunc baseFunc) {
+    public HomePageTvnet(BaseFunc baseFunc) {
         this.baseFunc = baseFunc;
     }
 
@@ -80,6 +82,35 @@ public class HomePage {
        }
    }
 
+    public WebElement getArticleById(int id) {
+        LOGGER.info("Getting article Nr. " + (id + 1));
+        List<WebElement> articles = baseFunc.findElements(ARTICLES);
+        Assertions.assertFalse(articles.isEmpty(), "There are no articles");
+        Assertions.assertTrue(articles.size() > id, "Articles amount is less then id");
+        return articles.get(id);
+    }
+
+    public ArticlePageTvnet openArticle(int id) {
+        LOGGER.info("Opening article Nr. " + (id + 1));
+        baseFunc.click(getArticleById(id));
+        return new ArticlePageTvnet(baseFunc);
+    }
+
+    public String getTitle(int id) {
+        LOGGER.info("Getting title for article Nr. " + (id + 1));
+        return getArticleById(id).getText().replaceAll("\\(\\d+\\)$", ""); //return baseFunc.getText(getArticleById(id), ARTICLES); зачем нам парентс и чаилд?
+    }
+
+    public int getCommentsCount(int id) {
+        LOGGER.info("Getting comments count for article Nr. " + (id + 1));
+        if (baseFunc.findElements(getArticleById(id), COMMENTS).isEmpty()) {
+            return 0;
+        } else {
+            String commentsCountToParse = baseFunc.getText(getArticleById(id), COMMENTS);
+            commentsCountToParse = commentsCountToParse.substring(1, commentsCountToParse.length() - 1);
+            return Integer.parseInt(commentsCountToParse);
+        }
+    }
 
 
 }

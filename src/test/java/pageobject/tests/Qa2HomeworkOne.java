@@ -3,17 +3,10 @@ package pageobject.tests;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.WebElement;
 import pageobject.pages.BaseFunc;
-import pageobject.pages.tvnet.ArticlePage;
-import pageobject.pages.tvnet.HomePage;
-
-import java.util.List;
+import pageobject.pages.tvnet.ArticlePageTvnet;
+import pageobject.pages.tvnet.HomePageTvnet;
 
 public class Qa2HomeworkOne {
 
@@ -29,13 +22,13 @@ public class Qa2HomeworkOne {
         baseFunc.openPage("tvnet.lv");
 
         //--------------- Home Page --------------------
-        HomePage homePage = new HomePage(baseFunc);
+        HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
 
         homePage.articles().get(0).click();
 
         //-------------- Article Page -------------------
-        ArticlePage articlePage = new ArticlePage(baseFunc);
+        ArticlePageTvnet articlePage = new ArticlePageTvnet(baseFunc);
         articlePage.goToComments();
     }
 
@@ -49,7 +42,7 @@ public class Qa2HomeworkOne {
         baseFunc.openPage("tvnet.lv");
 
         //--------------- Home Page --------------------
-        HomePage homePage = new HomePage(baseFunc);
+        HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
 
         WebElement firstHeadline = homePage.articles().get(0);
@@ -66,7 +59,7 @@ public class Qa2HomeworkOne {
         baseFunc.openPage("tvnet.lv");
 
         //--------------- Home Page --------------------
-        HomePage homePage = new HomePage(baseFunc);
+        HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
 
         System.out.println("Articles: " + homePage.articles().size());
@@ -85,7 +78,7 @@ public class Qa2HomeworkOne {
         baseFunc.openPage("tvnet.lv");
 
         //--------------- Home Page --------------------
-        HomePage homePage = new HomePage(baseFunc);
+        HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
 
         homePage.articlesWithOutCommentsCount();
@@ -101,7 +94,7 @@ public class Qa2HomeworkOne {
         baseFunc.openPage("tvnet.lv");
 
         //--------------- Home Page --------------------
-        HomePage homePage = new HomePage(baseFunc);
+        HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
 
         homePage.articlesWithCommentsCount();
