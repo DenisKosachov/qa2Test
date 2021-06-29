@@ -14,7 +14,9 @@ public class ArticlePageTvnet {
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
     private BaseFunc baseFunc;
 
-    public ArticlePageTvnet(BaseFunc baseFunc) { this.baseFunc = baseFunc; }
+    public ArticlePageTvnet(BaseFunc baseFunc) {
+        this.baseFunc = baseFunc;
+    }
 
     public void goToComments() {
         baseFunc.click(COMMENTS_BTN);

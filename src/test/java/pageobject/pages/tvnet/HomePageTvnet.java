@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobject.pages.BaseFunc;
-import pageobject.pages.delfi.ArticlePageDelfi;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class HomePageTvnet {
         this.baseFunc = baseFunc;
     }
 
-    public void acceptCookies () {
+    public void acceptCookies() {
         LOGGER.info("Accepting cookies");
         baseFunc.click(ACCEPT_COOKIE_BTN);
     }
@@ -43,7 +42,7 @@ public class HomePageTvnet {
         return baseFunc.findElements(LOGO_IMAGE);
     }
 
-    public void russianLanguage () {
+    public void changeLanguageToRussian() {
         List<WebElement> menuTop = baseFunc.findElements(MENUTOP);
         List<WebElement> listItemsMenuTop = baseFunc.findElements(menuTop.get(0), ITEMMENUTOP);
         for (WebElement itemMenuTop : listItemsMenuTop) {
@@ -55,32 +54,27 @@ public class HomePageTvnet {
         }
     }
 
-   public void articlesWithOutCommentsCount () {
-       List<WebElement> headlines = baseFunc.findElements(ARTICLES);
-       for (int i = 0; i < headlines.size(); i++) {
-           WebElement currentHeadline = headlines.get(i);
-           String headlineText = currentHeadline.getText();
-           if (!currentHeadline.findElements(COMMENTS).isEmpty()) {
-               WebElement currentСomment = currentHeadline.findElement(COMMENTS);
-               String comentText = (" " + currentСomment.getText());
-               String headlineNoComments = headlineText.replace(comentText, "");
-               System.out.println(i + 1 + ". " + headlineNoComments);
-           } else {
-               System.out.println(i + 1 + ". " + headlineText);
-           }
-       }
-   }
-
-   public void articlesWithCommentsCount() {
-       List<WebElement> headlines = baseFunc.findElements(ARTICLES);
-       for (int i = 0; i < headlines.size(); i++) {
-           WebElement currentHeadline = headlines.get(i);
-           String headlineText = currentHeadline.getText();
-           boolean condition = !currentHeadline.findElements(COMMENTS).isEmpty();
-           String result = (condition) ? (i + 1 + ". " + headlineText) : (i + 1+ ". " + headlineText + " (0)");
-           System.out.println(result);
-       }
-   }
+    public void getArticlesWithCommentsCount(boolean withCommentsCount) {
+        List<WebElement> headlines = baseFunc.findElements(ARTICLES);
+        for (int i = 0; i < headlines.size(); i++) {
+            WebElement currentHeadline = headlines.get(i);
+            String headlineText = currentHeadline.getText();
+            if (withCommentsCount == true) {
+                boolean condition = !currentHeadline.findElements(COMMENTS).isEmpty();
+                String result = (condition) ? (i + 1 + ". " + headlineText) : (i + 1 + ". " + headlineText + " (0)");
+                System.out.println(result);
+            } else {
+                if (!currentHeadline.findElements(COMMENTS).isEmpty()) {
+                    WebElement currentСomment = currentHeadline.findElement(COMMENTS);
+                    String comentText = (" " + currentСomment.getText());
+                    String headlineNoComments = headlineText.replace(comentText, "");
+                    System.out.println(i + 1 + ". " + headlineNoComments);
+                } else {
+                    System.out.println(i + 1 + ". " + headlineText);
+                }
+            }
+        }
+    }
 
     public WebElement getArticleById(int id) {
         LOGGER.info("Getting article Nr. " + (id + 1));
@@ -111,6 +105,4 @@ public class HomePageTvnet {
             return Integer.parseInt(commentsCountToParse);
         }
     }
-
-
 }

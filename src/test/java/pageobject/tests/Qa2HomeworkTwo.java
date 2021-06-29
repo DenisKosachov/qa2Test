@@ -2,7 +2,6 @@ package pageobject.tests;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pageobject.pages.BaseFunc;
@@ -41,6 +40,9 @@ public class Qa2HomeworkTwo {
         String articlePageTitle = articlePage.getTitle();
         int articlePageCommentsCount = articlePage.getCommentsCount();
 
+        Assertions.assertEquals(homePageTitle, articlePageTitle, "Wrong article page title!");
+        Assertions.assertEquals(homePageCommentsCount, articlePageCommentsCount, "Wrong article page comments count!");
+
         CommentsPageDelfi commentsPage = articlePage.openCommentsPage();
 
         //--------------- Comments Page --------------------
@@ -48,8 +50,8 @@ public class Qa2HomeworkTwo {
         int commentsPageCommentsCount = commentsPage.getCommentsCount();
 
 
-        Assertions.assertEquals(homePageTitle, articlePageTitle, commentsPageTitle);
-        Assertions.assertEquals(homePageCommentsCount, articlePageCommentsCount, commentsPageCommentsCount, "Wrong comments count!");
+        Assertions.assertEquals(homePageTitle, commentsPageTitle, "Wrong comments page title!");
+        Assertions.assertEquals(homePageCommentsCount, commentsPageCommentsCount, "Wrong comments page comments count!");
 
 
     }
@@ -74,6 +76,9 @@ public class Qa2HomeworkTwo {
         int articlePageCommentsCount = articlePage.getCommentsCount();
         String articlePageTitle = articlePage.getTitle();
 
+        Assertions.assertEquals(homePageTitle, articlePageTitle, "Wrong article page title!"); //вставляю сообщение, тут же выдаёт ошибку.
+        Assertions.assertEquals(homePageCommentsCount, articlePageCommentsCount, "Wrong article page comments count!");
+
         CommentsPageTvnet commentsPage = articlePage.openCommentsPage();
 
         //---------------- Comment Page -----------------
@@ -82,15 +87,9 @@ public class Qa2HomeworkTwo {
         String commentsPageTitle = commentsPage.getTitle();
 
 
-
-        Assertions.assertEquals(homePageTitle, articlePageTitle, commentsPageTitle); //вставляю сообщение, тут же выдаёт ошибку.
-        Assertions.assertEquals(homePageCommentsCount, articlePageCommentsCount, commentsPageCommentsCount,"Wrong comments count!");
+        Assertions.assertEquals(homePageTitle, commentsPageTitle, "Wrong comments page title!"); //вставляю сообщение, тут же выдаёт ошибку.
+        Assertions.assertEquals(homePageCommentsCount, commentsPageCommentsCount, "Wrong comments page comments count!");
 
 
     }
-
-//    @AfterEach
-//    public void closeBrowser() {
-//        baseFunc.closeBrowser();
-//    }
 }

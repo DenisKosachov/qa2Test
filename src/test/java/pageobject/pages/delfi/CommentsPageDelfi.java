@@ -17,7 +17,9 @@ public class CommentsPageDelfi {
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
     private BaseFunc baseFunc;
 
-    public CommentsPageDelfi(BaseFunc baseFunc) { this.baseFunc = baseFunc; }
+    public CommentsPageDelfi(BaseFunc baseFunc) {
+        this.baseFunc = baseFunc;
+    }
 
     public String getTitle() {
         LOGGER.info("Getting article title");

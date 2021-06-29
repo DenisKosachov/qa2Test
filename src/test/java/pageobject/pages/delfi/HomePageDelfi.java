@@ -24,7 +24,7 @@ public class HomePageDelfi {
         this.baseFunc = baseFunc;
     }
 
-    public void acceptCookies () {
+    public void acceptCookies() {
         LOGGER.info("Accepting cookies");
         baseFunc.click(ACCEPT_COOKIE_BTN);
         List<WebElement> closeButton = baseFunc.findElements(BLOCK_BTN);

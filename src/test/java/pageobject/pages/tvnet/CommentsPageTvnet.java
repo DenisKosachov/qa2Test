@@ -13,7 +13,9 @@ public class CommentsPageTvnet {
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
     private BaseFunc baseFunc;
 
-    public CommentsPageTvnet(BaseFunc baseFunc) { this.baseFunc = baseFunc; }
+    public CommentsPageTvnet(BaseFunc baseFunc) {
+        this.baseFunc = baseFunc;
+    }
 
     public String getTitle() {
         LOGGER.info("Getting article title");
@@ -33,5 +35,4 @@ public class CommentsPageTvnet {
             return Integer.parseInt(commentsCountToParse);
         }
     }
-
 }

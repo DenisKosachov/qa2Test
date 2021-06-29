@@ -11,6 +11,7 @@ import pageobject.pages.tvnet.HomePageTvnet;
 public class Qa2HomeworkOne {
 
     private final Logger LOGGER = LogManager.getLogger(this.getClass());
+    public boolean withCommentsCount;
 
     // Тест 1: Задание: найти первую статью и перейти в комментарии.
     @Test
@@ -65,7 +66,7 @@ public class Qa2HomeworkOne {
         System.out.println("Articles: " + homePage.articles().size());
         System.out.println("Comments: " + homePage.comments().size());
         System.out.println("Logo: " + homePage.logo().size());
-        homePage.russianLanguage();
+        homePage.changeLanguageToRussian();
     }
 
     // Тест 4: Задание: Вывести заголовоки всех статей без количества комментариев.
@@ -80,8 +81,8 @@ public class Qa2HomeworkOne {
         //--------------- Home Page --------------------
         HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
-
-        homePage.articlesWithOutCommentsCount();
+        withCommentsCount = false;
+        homePage.getArticlesWithCommentsCount(withCommentsCount);
     }
 
     // Тест 5: Задание: Вывести загаловки всех статей с количеством комментариев.
@@ -96,8 +97,8 @@ public class Qa2HomeworkOne {
         //--------------- Home Page --------------------
         HomePageTvnet homePage = new HomePageTvnet(baseFunc);
         homePage.acceptCookies();
-
-        homePage.articlesWithCommentsCount();
+        withCommentsCount = true;
+        homePage.getArticlesWithCommentsCount(withCommentsCount);
 
     }
 }
